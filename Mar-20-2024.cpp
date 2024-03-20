@@ -1,18 +1,34 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
 class Solution {
 public:
-    int leastInterval(vector<char>& tasks, int n) {
-        int freq[26] = {0};
-        for(char task : tasks){
-            freq[task - 'A']++;
+    ListNode* mergeInBetween(ListNode* list1, int a, int b, ListNode* list2) {
+        ListNode* prevA = list1;
+        ListNode* prevB = list1;
+        for(int i = 0; i <= b; i++)
+        {
+            if(i == a - 1)
+                prevA = prevB;
+            prevB = prevB->next;
         }
-        sort(begin(freq) , end(freq));
-        int chunk = freq[25] - 1;
-        int idel = chunk * n;
+        
+        ListNode* temp = list2;
+        while(temp->next)
+            temp = temp->next;
+        
+        prevA->next = list2;
+        temp->next = prevB;
 
-        for(int i=24; i>=0; i--){
-            idel -= min(chunk,freq[i]);
-        }
+        return list1;
+        
 
-        return idel < 0 ? tasks.size() : tasks.size() + idel;
     }
 };
